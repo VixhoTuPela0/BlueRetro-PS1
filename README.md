@@ -18,7 +18,41 @@ Thank you,
 Jacques Gagnon
 ```
 
-# BlueRetro
+# BlueRetro-PS1 (PSX/PS2-only fork)
+
+This is a **PSX/PS2-only** fork of [BlueRetro](https://github.com/darthcloud/BlueRetro), optimised for
+PlayStation 1 and PlayStation 2 with optional OLED screen support. All non-PlayStation console support
+(wired adapters, low-level drivers and configuration presets) has been removed to reduce binary size
+and compile time.
+
+**Supported hardware:** HW1  
+**Supported systems:** PSX (PS1) and PS2  
+**Bluetooth controllers:** PS3, PS4/PS5 (DualShock/DualSense), Switch Pro, Wii and generic HID (BR/EDR & LE)
+
+## Building for HW1 + PSX/PS2
+
+### Prerequisites
+- [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/) (tested with v5.x)
+- An ESP32 (classic, not S3/C3)
+
+### Build steps
+
+```bash
+# 1. Set the target chip
+idf.py set-target esp32
+
+# 2. Build with the HW1 PlayStation preset applied on top of the base defaults
+idf.py -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;configs/hw1/playstation" build
+
+# 3. Flash to your ESP32
+idf.py flash
+```
+
+Or apply the preset manually to your `sdkconfig` via `idf.py menuconfig` and ensure:
+- `CONFIG_BLUERETRO_HW2=n`
+- `CONFIG_BLUERETRO_SYSTEM_PSX_PS2=y`
+
+## Original BlueRetro
 
 <p align="center"><img src="/static/PNGs/BRE_Logo_Color_Outline.png" width="600"/></p>
 <br>
