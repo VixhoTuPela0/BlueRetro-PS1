@@ -36,7 +36,7 @@
 #include <esp32/rom/cache.h>
 #include <xt_instr_macros.h>
 #include <xtensa/config/specreg.h>
-#include <xtensa_api.h>
+#include <xtensa/xtensa_api.h>
 #include <xtensa/config/core.h>
 
 typedef void (*wired_init_t)(void);

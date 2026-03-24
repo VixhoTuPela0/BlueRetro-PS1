@@ -276,7 +276,7 @@ int32_t ps_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data) 
             ps5_to_generic(bt_data, ctrl_data);
             break;
         default:
-            printf("# Unknown report type: "%02" PRIX32 "\n", bt_data->base.report_type);
+            printf("# Unknown report type: %02" PRIX32 "\n", bt_data->base.report_type);
             return -1;
     }
 

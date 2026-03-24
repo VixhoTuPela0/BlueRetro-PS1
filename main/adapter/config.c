@@ -298,7 +298,7 @@ static void config_init_nvs_patch(struct config *data) {
     err = nvs_open("mapping", NVS_READONLY, &nvs);
     if (err == ESP_OK) {
         nvs_iterator_t it = NULL;
-        err = nvs_entry_find_in_handle(nvs, NVS_TYPE_ANY, &it);
+        err = nvs_entry_find("nvs", "mapping", NVS_TYPE_ANY, &it);
         while (err == ESP_OK) {
             nvs_entry_info_t info;
             nvs_entry_info(it, &info);
@@ -424,7 +424,7 @@ void hw_config_patch(void) {
     err = nvs_open("hw", NVS_READONLY, &nvs);
     if (err == ESP_OK) {
         nvs_iterator_t it = NULL;
-        err = nvs_entry_find_in_handle(nvs, NVS_TYPE_ANY, &it);
+        err = nvs_entry_find("nvs", "hw", NVS_TYPE_ANY, &it);
         while (err == ESP_OK) {
             nvs_entry_info_t info;
             nvs_entry_info(it, &info);
