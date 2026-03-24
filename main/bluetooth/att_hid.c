@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include "host.h"
 #include "hci.h"
 #include "att.h"
@@ -112,8 +113,8 @@ static void bt_att_hid_process_device_name(struct bt_dev *device,
     }
 
     bt_hid_set_type_flags_from_name(device, hid_data->device_name);
-    printf("dev: %ld type: %ld %s\n", device->ids.id, device->ids.type, hid_data->device_name);
-    bt_mon_log(true, "dev: %ld type: %ld %s\n", device->ids.id, device->ids.type, hid_data->device_name);
+    printf("dev: %" PRId32 " type: %" PRId32 " %s\n", device->ids.id, device->ids.type, hid_data->device_name);
+    bt_mon_log(true, "dev: %" PRId32 " type: %" PRId32 " %s\n", device->ids.id, device->ids.type, hid_data->device_name);
 
     bt_att_hid_start_next_state(device, hid_data);
 }
@@ -128,9 +129,9 @@ static void bt_att_hid_process_appearance(struct bt_dev *device,
     if (data) {
         hid_data->appearance = *(uint16_t *)data;
     }
-    printf("dev: %ld appearance: %03X:%02X\n",
+    printf("dev: %" PRId32 " appearance: %03X:%02X\n",
         device->ids.id, hid_data->appearance >> 6, hid_data->appearance & 0x3F);
-    bt_mon_log(true, "dev: %ld appearance: %03X:%02X\n",
+    bt_mon_log(true, "dev: %" PRId32 " appearance: %03X:%02X\n",
         device->ids.id, hid_data->appearance >> 6, hid_data->appearance & 0x3F);
     bt_att_hid_start_next_state(device, hid_data);
 }
@@ -312,7 +313,7 @@ static void bt_att_hid_process_report_map(struct bt_dev *device,
     if (bt_data->base.sdp_data == NULL) {
         bt_data->base.sdp_data = malloc(BT_SDP_DATA_SIZE);
         if (bt_data->base.sdp_data == NULL) {
-            printf("# dev: %ld Failed to alloc report memory\n", device->ids.id);
+            printf("# dev: %" PRId32 " Failed to alloc report memory\n", device->ids.id);
             return;
         }
     }
@@ -336,7 +337,7 @@ static void bt_att_hid_process_report_map(struct bt_dev *device,
         bt_att_hid_start_next_state(device, hid_data);
     }
     else {
-        printf("# dev: %ld No report found!!\n", device->ids.id);
+        printf("# dev: %" PRId32 " No report found!!\n", device->ids.id);
     }
 }
 
@@ -555,7 +556,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_process_ident_hid_hdls(device, hid_data, att_len, find_info_rsp->info, find_info_rsp->format);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }
@@ -593,7 +594,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_process_batt_lvl(device, hid_data, att_len, read_type_rsp->data[0].value, rsp_len);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }
@@ -615,7 +616,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_process_report_ref(device, hid_data, att_len, read_rsp->value, att_len - 1);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }
@@ -634,7 +635,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_process_report_map(device, hid_data, att_len, read_blob_rsp->value, att_len - 1);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }
@@ -650,7 +651,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_process_find_hid_hdls(device, hid_data, att_len, (uint8_t *)read_group_rsp->data, read_group_rsp->len);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }
@@ -664,7 +665,7 @@ void bt_att_hid_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                         bt_att_hid_continue_report_cfg(device, hid_data, att_len, NULL, 0);
                         break;
                     default:
-                        printf("# %s: Invalid state: %ld rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
+                        printf("# %s: Invalid state: %" PRId32 " rsp: 0x%02X\n", __FUNCTION__, device->hid_state, bt_hci_acl_pkt->att_hdr.code);
                         break;
                 }
             }

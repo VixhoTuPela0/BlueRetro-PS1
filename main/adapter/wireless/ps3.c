@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
 #include "tests/cmds.h"
@@ -91,7 +92,7 @@ int32_t ps3_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data)
     struct ps3_map *map = (struct ps3_map *)bt_data->base.input;
     struct ctrl_meta *meta = bt_data->raw_src_mappings[PAD].meta;
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld, \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %lu},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRId32 ", \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %" PRIu32 "},\n",
         bt_data->base.report_id, map->axes[ps3_axes_idx[0]], map->axes[ps3_axes_idx[1]], map->axes[ps3_axes_idx[2]],
         map->axes[ps3_axes_idx[3]], map->axes[ps3_axes_idx[4]], map->axes[ps3_axes_idx[5]], map->buttons);
 

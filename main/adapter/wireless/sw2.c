@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
@@ -236,7 +237,7 @@ static int32_t sw2_pro_to_generic(struct bt_data *bt_data, struct wireless_ctrl 
     axes[2] = map->axes[3] | ((map->axes[4] & 0xF) << 8);
     axes[3] = (map->axes[4] >> 4) | (map->axes[5] << 4);
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %lu},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %" PRIu32 "},\n",
         axes[0], axes[1], axes[2], axes[3], map->buttons);
 
     for (uint32_t i = 0; i < SW2_AXES_MAX; i++) {
@@ -274,7 +275,7 @@ static int32_t sw2_gc_to_generic(struct bt_data *bt_data, struct wireless_ctrl *
     axes[2] = map->axes[3] | ((map->axes[4] & 0xF) << 8);
     axes[3] = (map->axes[4] >> 4) | (map->axes[5] << 4);
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %lu},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %" PRIu32 "},\n",
         axes[0], axes[1], axes[2], axes[3], map->buttons);
 
     for (uint32_t i = 0; i < SW2_AXES_MAX; i++) {

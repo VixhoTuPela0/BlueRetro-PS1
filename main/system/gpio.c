@@ -22,6 +22,16 @@
 #include "soc/rtc_io_periph.h"
 #include "gpio.h"
 
+/* gpio_ll_matrix_out_default was added to the HAL after ESP-IDF v4.4.
+ * For older versions, fall back to the equivalent ROM gpio_matrix_out. */
+#include "esp_idf_version.h"
+#if ESP_IDF_VERSION < ESP_IDF_VERSION_VAL(5, 0, 0)
+#include "esp32/rom/gpio.h"   /* gpio_matrix_out */
+#include "soc/gpio_sig_map.h" /* SIG_GPIO_OUT_IDX */
+#define gpio_ll_matrix_out_default(hw, gpio_num) \
+    gpio_matrix_out((uint32_t)(gpio_num), SIG_GPIO_OUT_IDX, false, false)
+#endif
+
 typedef struct {
     uint32_t reg;       /*!< Register of RTC pad, or 0 if not an RTC GPIO */
     uint32_t pullup;    /*!< Mask of pullup enable */

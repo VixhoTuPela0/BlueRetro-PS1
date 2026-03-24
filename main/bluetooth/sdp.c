@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include "zephyr/types.h"
 #include "zephyr/sdp.h"
@@ -227,9 +228,9 @@ void bt_sdp_parser(struct bt_data *bt_data) {
                 hid_desc += 4;
                 break;
         }
-        printf("# %s HID descriptor size: %lu Usage page: %02X%02X\n", __FUNCTION__, hid_desc_len, hid_desc[0], hid_desc[1]);
+        printf("# %s HID descriptor size: %" PRIu32 " Usage page: %02X%02X\n", __FUNCTION__, hid_desc_len, hid_desc[0], hid_desc[1]);
         if ((hid_offset + hid_desc_len) > bt_data->base.sdp_len) {
-            printf("# %s HID descriptor size exceed buffer size: %ld, trunc\n", __FUNCTION__, bt_data->base.sdp_len);
+            printf("# %s HID descriptor size exceed buffer size: %" PRId32 ", trunc\n", __FUNCTION__, bt_data->base.sdp_len);
             hid_desc_len = bt_data->base.sdp_len - hid_offset;
         }
         hid_parser(bt_data, hid_desc, hid_desc_len);
@@ -267,13 +268,13 @@ void bt_sdp_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt) {
                 case 0:
                     if (cp_len > free_len) {
                         cp_len = free_len;
-                        printf("# %s SDP data > buffer will be trunc to %d, cp_len %ld\n", __FUNCTION__, BT_SDP_DATA_SIZE, cp_len);
+                        printf("# %s SDP data > buffer will be trunc to %d, cp_len %" PRId32 "\n", __FUNCTION__, BT_SDP_DATA_SIZE, cp_len);
                     }
 
                     if (bt_adapter.data[device->ids.id].base.sdp_data == NULL) {
                         bt_adapter.data[device->ids.id].base.sdp_data = malloc(BT_SDP_DATA_SIZE);
                         if (bt_adapter.data[device->ids.id].base.sdp_data == NULL) {
-                            printf("# dev: %ld Failed to alloc report memory\n", device->ids.id);
+                            printf("# dev: %" PRId32 " Failed to alloc report memory\n", device->ids.id);
                             break;
                         }
                     }
@@ -291,13 +292,13 @@ void bt_sdp_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt) {
                 case 1:
                     if (cp_len > free_pnp_len) {
                         cp_len = free_pnp_len;
-                        printf("# %s PNP data > buffer will be trunc to %d, cp_len %ld\n", __FUNCTION__, BT_PNP_DATA_SIZE, cp_len);
+                        printf("# %s PNP data > buffer will be trunc to %d, cp_len %" PRId32 "\n", __FUNCTION__, BT_PNP_DATA_SIZE, cp_len);
                     }
 
                     if (bt_adapter.data[device->ids.id].base.pnp_data == NULL) {
                         bt_adapter.data[device->ids.id].base.pnp_data = malloc(BT_PNP_DATA_SIZE);
                         if (bt_adapter.data[device->ids.id].base.pnp_data == NULL) {
-                            printf("# dev: %ld Failed to alloc pnp memory\n", device->ids.id);
+                            printf("# dev: %" PRId32 " Failed to alloc pnp memory\n", device->ids.id);
                             break;
                         }
                     }

@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 #include <sys/stat.h>
 #include <esp_heap_caps.h>
 #include <esp_timer.h>
@@ -62,7 +63,7 @@ static int32_t mc_restore(void) {
                 printf("# %s: restore sucessful!\n", __FUNCTION__);
             }
             else {
-                printf("# %s: restore failed! cnt: %ld File size:%ld\n", __FUNCTION__, count, st.st_size);
+                printf("# %s: restore failed! cnt: %" PRIu32 " File size:%jd\n", __FUNCTION__, count, (intmax_t)st.st_size);
             }
         }
     }
@@ -87,7 +88,7 @@ static int32_t mc_store(void) {
             ret = 0;
             mc_block_state = 0;
         }
-        printf("# %s: file updated cnt: %ld\n", __FUNCTION__, count);
+        printf("# %s: file updated cnt: %" PRIu32 "\n", __FUNCTION__, count);
     }
     return ret;
 }
@@ -115,7 +116,7 @@ static int32_t mc_store_spread(void) {
                 atomic_clear_bit(&mc_block_state, block);
             }
 
-            printf("# %s: block %ld updated cnt: %ld\n", __FUNCTION__, block, count);
+            printf("# %s: block %" PRIu32 " updated cnt: %" PRIu32 "\n", __FUNCTION__, block, count);
 
             if (mc_block_state) {
                 mc_start_update_timer(20000);
@@ -134,7 +135,7 @@ int32_t mc_init_mem(void) {
         mc_buffer[i] = heap_caps_malloc(MC_BUFFER_BLOCK_SIZE, MALLOC_CAP_DMA);
 
         if (mc_buffer[i] == NULL) {
-            printf("# %s mc_buffer[%ld] alloc fail\n", __FUNCTION__, i);
+            printf("# %s mc_buffer[%" PRIu32 "] alloc fail\n", __FUNCTION__, i);
             heap_caps_dump_all();
             return -1;
         }

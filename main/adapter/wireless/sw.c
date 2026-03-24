@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
 #include "adapter/mapping_quirks.h"
@@ -440,7 +441,7 @@ static int32_t sw_native_to_generic(struct bt_data *bt_data, struct wireless_ctr
         axes[3] = (map->axes[4] >> 4) | (map->axes[5] << 4);
     }
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %lu},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"axes\": [%u, %u, %u, %u], \"btns\": %" PRIu32 "},\n",
         axes[0], axes[1], axes[2], axes[3], map->buttons);
 
     for (uint32_t i = 0; i < SW_AXES_MAX; i++) {
@@ -454,7 +455,7 @@ static int32_t sw_hid_to_generic(struct bt_data *bt_data, struct wireless_ctrl *
     struct sw_map *map = (struct sw_map *)bt_data->base.input;
     struct ctrl_meta *meta = bt_data->raw_src_mappings[PAD].meta;
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld, \"axes\": [%u, %u, %u, %u], \"btns\": %u, \"hat\": %u},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRId32 ", \"axes\": [%u, %u, %u, %u], \"btns\": %u, \"hat\": %u},\n",
         bt_data->base.report_id, map->axes[sw_axes_idx[0]], map->axes[sw_axes_idx[1]],
         map->axes[sw_axes_idx[2]], map->axes[sw_axes_idx[3]], map->buttons, map->hat);
 

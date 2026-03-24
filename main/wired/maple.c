@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include <esp_timer.h>
 #include <esp32/rom/ets_sys.h>
 #include <soc/efuse_reg.h>
@@ -653,7 +654,7 @@ maple_end:
                                 maple_tx(port, maple0, maple1, pkt.data, pkt.len * 4 + 5);
                                 break;
                             default:
-                                ets_printf("%02X: Unk cmd: %02X %02X %ld\n", dst, cmd, crc, byte);
+                                ets_printf("%02X: Unk cmd: %02X %02X %" PRIu32 "\n", dst, cmd, crc, byte);
                                 break;
                         }
                         break;

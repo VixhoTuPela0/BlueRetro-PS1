@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <dirent.h>
 #include <esp_ota_ops.h>
 #include <esp_system.h>
@@ -707,7 +708,7 @@ void bt_att_cfg_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                 config.global_cfg.banksel = 0xFF;
             }
 
-            printf("# BT_ATT_OP_WRITE_REQ len: %ld\n", data_len);
+            printf("# BT_ATT_OP_WRITE_REQ len: %" PRId32 "\n", data_len);
             switch (wr_req->handle) {
                 case BR_GLBL_CFG_CHRC_HDL:
                     printf("# BR_GLBL_CFG_CHRC_HDL %04X\n", wr_req->handle);
@@ -761,7 +762,7 @@ void bt_att_cfg_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
             struct bt_att_prepare_write_req *prep_wr_req = (struct bt_att_prepare_write_req *)bt_hci_acl_pkt->att_data;
             uint32_t att_len = len - (BT_HCI_H4_HDR_SIZE + BT_HCI_ACL_HDR_SIZE + sizeof(struct bt_l2cap_hdr) + sizeof(struct bt_att_hdr));
             uint32_t data_len = att_len - (sizeof(prep_wr_req->handle) + sizeof(prep_wr_req->offset));
-            printf("# BT_ATT_OP_PREPARE_WRITE_REQ len: %ld offset: %d\n", data_len, prep_wr_req->offset);
+            printf("# BT_ATT_OP_PREPARE_WRITE_REQ len: %" PRId32 " offset: %d\n", data_len, prep_wr_req->offset);
             switch (prep_wr_req->handle) {
                 case BR_IN_CFG_DATA_CHRC_HDL:
                     memcpy((void *)&config.in_cfg[in_cfg_id] + in_cfg_offset + prep_wr_req->offset, prep_wr_req->value, data_len);

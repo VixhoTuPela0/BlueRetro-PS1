@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 #include <esp_heap_caps.h>
 #include "adapter.h"
 #include "hid_parser.h"
@@ -322,28 +323,28 @@ static void hid_patch_report(struct bt_data *bt_data, struct hid_report *report)
 static void hid_process_report(struct bt_data *bt_data, struct hid_report *report) {
     hid_patch_report(bt_data, report);
     report->type = hid_report_fingerprint(report);
-    TESTS_CMDS_LOG("{\"report_id\": %ld, \"report_tag\": %ld, \"usages\": [", report->id, report->tag);
+    TESTS_CMDS_LOG("{\"report_id\": %" PRIu32 ", \"report_tag\": %" PRIu32 ", \"usages\": [", report->id, report->tag);
     for (uint32_t i = 0; i < report->usage_cnt; i++) {
         if (i) {
             TESTS_CMDS_LOG(", ");
         }
-        TESTS_CMDS_LOG("{\"usage_page\": %ld, \"usage\": %ld, \"bit_offset\": %lu, \"bit_size\": %lu}",
+        TESTS_CMDS_LOG("{\"usage_page\": %" PRIu32 ", \"usage\": %" PRIu32 ", \"bit_offset\": %" PRIu32 ", \"bit_size\": %" PRIu32 "}",
             report->usages[i].usage_page, report->usages[i].usage, report->usages[i].bit_offset,
             report->usages[i].bit_size);
     }
     TESTS_CMDS_LOG("]");
-    printf("%ld %c ", report->id, (report->tag) ? 'O' : 'I');
-    bt_mon_log(false, "%ld %c ", report->id, (report->tag) ? 'O' : 'I');
+    printf("%" PRIu32 " %c ", report->id, (report->tag) ? 'O' : 'I');
+    bt_mon_log(false, "%" PRIu32 " %c ", report->id, (report->tag) ? 'O' : 'I');
     for (uint32_t i = 0; i < report->usage_cnt; i++) {
-        printf("%02lX%02lX %lu %lu ", report->usages[i].usage_page, report->usages[i].usage,
+        printf("%02" PRIX32 "%02" PRIX32 " %" PRIu32 " %" PRIu32 " ", report->usages[i].usage_page, report->usages[i].usage,
             report->usages[i].bit_offset, report->usages[i].bit_size);
-        bt_mon_log(false, "%02lX%02lX %lu %lu ", report->usages[i].usage_page, report->usages[i].usage,
+        bt_mon_log(false, "%02" PRIX32 "%02" PRIX32 " %" PRIu32 " %" PRIu32 " ", report->usages[i].usage_page, report->usages[i].usage,
             report->usages[i].bit_offset, report->usages[i].bit_size);
     }
     if (report->type != REPORT_NONE) {
-        TESTS_CMDS_LOG(", \"report_type\": %ld", report->type);
-        printf("rtype: %ld", report->type);
-        bt_mon_log(false, "rtype: %ld", report->type);
+        TESTS_CMDS_LOG(", \"report_type\": %" PRIu32, report->type);
+        printf("rtype: %" PRIu32, report->type);
+        bt_mon_log(false, "rtype: %" PRIu32, report->type);
         /* For output report we got to make a choice. */
         /* So we use the first one we find. */
         if (report->tag == HID_OUT && bt_data->reports[report->type] == NULL) {
