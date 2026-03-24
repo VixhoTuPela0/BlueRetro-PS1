@@ -8,125 +8,15 @@ menu "BlueRetro"
 
     choice
         prompt "Select universal or specific system"
-        default BLUERETRO_SYSTEM_UNIVERSAL
+        default BLUERETRO_SYSTEM_PSX_PS2
         help
             BlueRetro is an universal adapter but you may force it to support
             only one system.
-
-        config BLUERETRO_SYSTEM_UNIVERSAL
-            bool "UNIVERSAL"
-            help
-                Select this to support all systems.
-
-        config BLUERETRO_SYSTEM_PARALLEL_1P
-            bool "PARALLEL_1P_PP"
-            help
-                Select this to support only PARALLEL_1P push-pull.
-
-        config BLUERETRO_SYSTEM_PARALLEL_2P
-            bool "PARALLEL_2P_PP"
-            help
-                Select this to support only PARALLEL_2P push-pull.
-
-        config BLUERETRO_SYSTEM_NES
-            bool "NES"
-            help
-                Select this to support only NES.
-
-        config BLUERETRO_SYSTEM_PCE
-            bool "PCE"
-            help
-                Select this to support only PCE.
-
-        config BLUERETRO_SYSTEM_GENESIS
-            bool "MEGADRIVE/GENESIS"
-            help
-                Select this to support only MEGADRIVE/GENESIS.
-
-        config BLUERETRO_SYSTEM_SNES
-            bool "SNES"
-            help
-                Select this to support only SNES.
-
-        config BLUERETRO_SYSTEM_CDI
-            bool "CD-i"
-            help
-                Select this to support only CD-i.
-
-        config BLUERETRO_SYSTEM_CD32
-            bool "CD32"
-            help
-                Select this to support only CD32.
-
-        config BLUERETRO_SYSTEM_3DO
-            bool "3DO"
-            help
-                Select this to support only 3DO.
-
-        config BLUERETRO_SYSTEM_JAGUAR
-            bool "JAGUAR"
-            help
-                Select this to support only JAGUAR.
 
         config BLUERETRO_SYSTEM_PSX_PS2
             bool "PSX/PS2"
             help
                 Select this to support only PSX & PS2.
-
-        config BLUERETRO_SYSTEM_SATURN
-            bool "SATURN"
-            help
-                Select this to support only SATURN.
-
-        config BLUERETRO_SYSTEM_PCFX
-            bool "PC-FX"
-            help
-                Select this to support only PC-FX.
-
-        config BLUERETRO_SYSTEM_JVS
-            bool "JVS"
-            help
-                Select this to support only JVS.
-
-        config BLUERETRO_SYSTEM_N64
-            bool "N64"
-            help
-                Select this to support only N64.
-
-        config BLUERETRO_SYSTEM_DC
-            bool "DC"
-            help
-                Select this to support only DC.
-
-        config BLUERETRO_SYSTEM_GC
-            bool "GC"
-            help
-                Select this to support only GC.
-
-        config BLUERETRO_SYSTEM_WII_EXT
-            bool "Wii ext."
-            help
-                Select this to support only Wii ext.
-
-        config BLUERETRO_SYSTEM_VBOY
-            bool "VB"
-            help
-                Select this to support only VB.
-
-        config BLUERETRO_SYSTEM_PARALLEL_1P_OD
-            bool "PARALLEL_1P_OD"
-            help
-                Select this to support only PARALLEL_1P open drain.
-
-        config BLUERETRO_SYSTEM_PARALLEL_2P_OD
-            bool "PARALLEL_2P_OD"
-            help
-                Select this to support only PARALLEL_2P open drain.
-
-        config BLUERETRO_SYSTEM_SEA_BOARD
-            bool "SEA Board"
-            help
-                Select this to support only SEA Board.
 
     endchoice
 
