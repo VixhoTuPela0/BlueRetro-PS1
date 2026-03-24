@@ -7,6 +7,7 @@
 #define _ADAPTER_H_
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <esp_attr.h>
 #include "zephyr/atomic.h"
 #include "tests/cmds.h"
@@ -606,10 +607,10 @@ static inline void bt_type_update(int32_t dev_id, int32_t type, uint32_t subtype
         for (uint32_t i = 0; i < REPORT_MAX; i++) {
             atomic_clear_bit(&bt_data->base.flags[i], BT_INIT);
         }
-        printf("%s: dev: %ld type: %ld subtype: %ld\n", __FUNCTION__, dev_id, type, subtype);
+        printf("%s: dev: %" PRId32 " type: %" PRId32 " subtype: %" PRIu32 "\n", __FUNCTION__, dev_id, type, subtype);
         TESTS_CMDS_LOG("\"type_update\": {\"device_id\": %d, \"device_type\": %d, \"device_subtype\": %d},\n",
             dev_id, type, subtype);
-        bt_mon_log(true, "%s: dev: %ld type: %ld subtype: %ld\n", __FUNCTION__, dev_id, type, subtype);
+        bt_mon_log(true, "%s: dev: %" PRId32 " type: %" PRId32 " subtype: %" PRIu32 "\n", __FUNCTION__, dev_id, type, subtype);
     }
 }
 
