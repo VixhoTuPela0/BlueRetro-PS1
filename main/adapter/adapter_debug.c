@@ -49,7 +49,7 @@ void adapter_debug_wireless_print(struct wireless_ctrl *ctrl_input) {
     TESTS_CMDS_LOG("\"axes\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRIu32 ", %" PRIu32 "], \"btns\": [%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 "]},\n",
         ctrl_input->axes[0].value, ctrl_input->axes[1].value, ctrl_input->axes[2].value, ctrl_input->axes[3].value, ctrl_input->axes[4].value, ctrl_input->axes[5].value,
         ctrl_input->btns[0].value, ctrl_input->btns[1].value, ctrl_input->btns[2].value, ctrl_input->btns[3].value);
-    printf("LX: %s"%08" PRIX32 "%s, LY: %s"%08" PRIX32 "%s, RX: %s"%08" PRIX32 "%s, RY: %s"%08" PRIX32 "%s, LT: %s"%08" PRIX32 "%s, RT: %s"%08" PRIX32 "%s",
+    printf("LX: %s%08" PRIX32 "%s, LY: %s%08" PRIX32 "%s, RX: %s%08" PRIX32 "%s, RY: %s%08" PRIX32 "%s, LT: %s%08" PRIX32 "%s, RT: %s%08" PRIX32 "%s",
         BOLD, ctrl_input->axes[0].value, RESET, BOLD, ctrl_input->axes[1].value, RESET, BOLD, ctrl_input->axes[2].value, RESET, BOLD, ctrl_input->axes[3].value, RESET,
         BOLD, ctrl_input->axes[4].value, RESET, BOLD, ctrl_input->axes[5].value, RESET);
 #ifdef CONFIG_BLUERETRO_ADAPTER_BTNS_DBG
@@ -62,7 +62,7 @@ void adapter_debug_wired_print(struct wired_ctrl *ctrl_input) {
     TESTS_CMDS_LOG("\"axes\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRIu32 ", %" PRIu32 "], \"btns\": [%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 "]},\n",
         ctrl_input->axes[0].value, ctrl_input->axes[1].value, ctrl_input->axes[2].value, ctrl_input->axes[3].value, ctrl_input->axes[4].value, ctrl_input->axes[5].value,
         ctrl_input->btns[0].value, ctrl_input->btns[1].value, ctrl_input->btns[2].value, ctrl_input->btns[3].value);
-    printf("LX: %s"%08" PRIX32 "%s, LY: %s"%08" PRIX32 "%s, RX: %s"%08" PRIX32 "%s, RY: %s"%08" PRIX32 "%s, LT: %s"%08" PRIX32 "%s, RT: %s"%08" PRIX32 "%s",
+    printf("LX: %s%08" PRIX32 "%s, LY: %s%08" PRIX32 "%s, RX: %s%08" PRIX32 "%s, RY: %s%08" PRIX32 "%s, LT: %s%08" PRIX32 "%s, RT: %s%08" PRIX32 "%s",
         BOLD, ctrl_input->axes[0].value, RESET, BOLD, ctrl_input->axes[1].value, RESET, BOLD, ctrl_input->axes[2].value, RESET, BOLD, ctrl_input->axes[3].value, RESET,
         BOLD, ctrl_input->axes[4].value, RESET, BOLD, ctrl_input->axes[5].value, RESET);
 #ifdef CONFIG_BLUERETRO_ADAPTER_BTNS_DBG
