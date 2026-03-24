@@ -25,6 +25,7 @@
 #include "wired/wired_rtos.h"
 #include "adapter/memory_card.h"
 #include "system/manager.h"
+#include "display/ui.h"
 #include "tests/ws_srv.h"
 #include "tests/coverage.h"
 #include "sdkconfig.h"
@@ -133,6 +134,10 @@ static void wl_init_task(void *arg) {
 
 #ifdef CONFIG_BLUERETRO_WS_CMDS
     ws_srv_init();
+#endif
+
+#ifndef CONFIG_BLUERETRO_QEMU
+    ui_init();
 #endif
 
     if (ota_state == ESP_OTA_IMG_PENDING_VERIFY) {
