@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include <stdlib.h>
 #include <freertos/FreeRTOS.h>
@@ -529,7 +530,7 @@ void adapter_init(void) {
     for (uint32_t i = 0; i < BT_MAX_DEV; i++) {
         bt_adapter.data[i].raw_src_mappings = heap_caps_aligned_alloc(32, sizeof(struct raw_src_mapping) * REPORT_MAX, MALLOC_CAP_32BIT);
         if (bt_adapter.data[i].raw_src_mappings == NULL) {
-            printf("# %s bt_adapter.data[%ld].raw_src_mappings alloc fail\n", __FUNCTION__, i);
+            printf("# %s bt_adapter.data[%" PRId32 "].raw_src_mappings alloc fail\n", __FUNCTION__, i);
         }
     }
 

@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
 #include "adapter_debug.h"
@@ -45,10 +46,10 @@ static void adapter_debug_btns(int32_t value) {
 #endif
 
 void adapter_debug_wireless_print(struct wireless_ctrl *ctrl_input) {
-    TESTS_CMDS_LOG("\"axes\": [%ld, %ld, %ld, %ld, %lu, %lu], \"btns\": [%lu, %lu, %lu, %lu]},\n",
+    TESTS_CMDS_LOG("\"axes\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRIu32 ", %" PRIu32 "], \"btns\": [%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 "]},\n",
         ctrl_input->axes[0].value, ctrl_input->axes[1].value, ctrl_input->axes[2].value, ctrl_input->axes[3].value, ctrl_input->axes[4].value, ctrl_input->axes[5].value,
         ctrl_input->btns[0].value, ctrl_input->btns[1].value, ctrl_input->btns[2].value, ctrl_input->btns[3].value);
-    printf("LX: %s%08lX%s, LY: %s%08lX%s, RX: %s%08lX%s, RY: %s%08lX%s, LT: %s%08lX%s, RT: %s%08lX%s",
+    printf("LX: %s"%08" PRIX32 "%s, LY: %s"%08" PRIX32 "%s, RX: %s"%08" PRIX32 "%s, RY: %s"%08" PRIX32 "%s, LT: %s"%08" PRIX32 "%s, RT: %s"%08" PRIX32 "%s",
         BOLD, ctrl_input->axes[0].value, RESET, BOLD, ctrl_input->axes[1].value, RESET, BOLD, ctrl_input->axes[2].value, RESET, BOLD, ctrl_input->axes[3].value, RESET,
         BOLD, ctrl_input->axes[4].value, RESET, BOLD, ctrl_input->axes[5].value, RESET);
 #ifdef CONFIG_BLUERETRO_ADAPTER_BTNS_DBG
@@ -58,10 +59,10 @@ void adapter_debug_wireless_print(struct wireless_ctrl *ctrl_input) {
 }
 
 void adapter_debug_wired_print(struct wired_ctrl *ctrl_input) {
-    TESTS_CMDS_LOG("\"axes\": [%ld, %ld, %ld, %ld, %lu, %lu], \"btns\": [%lu, %lu, %lu, %lu]},\n",
+    TESTS_CMDS_LOG("\"axes\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRIu32 ", %" PRIu32 "], \"btns\": [%" PRIu32 ", %" PRIu32 ", %" PRIu32 ", %" PRIu32 "]},\n",
         ctrl_input->axes[0].value, ctrl_input->axes[1].value, ctrl_input->axes[2].value, ctrl_input->axes[3].value, ctrl_input->axes[4].value, ctrl_input->axes[5].value,
         ctrl_input->btns[0].value, ctrl_input->btns[1].value, ctrl_input->btns[2].value, ctrl_input->btns[3].value);
-    printf("LX: %s%08lX%s, LY: %s%08lX%s, RX: %s%08lX%s, RY: %s%08lX%s, LT: %s%08lX%s, RT: %s%08lX%s",
+    printf("LX: %s"%08" PRIX32 "%s, LY: %s"%08" PRIX32 "%s, RX: %s"%08" PRIX32 "%s, RY: %s"%08" PRIX32 "%s, LT: %s"%08" PRIX32 "%s, RT: %s"%08" PRIX32 "%s",
         BOLD, ctrl_input->axes[0].value, RESET, BOLD, ctrl_input->axes[1].value, RESET, BOLD, ctrl_input->axes[2].value, RESET, BOLD, ctrl_input->axes[3].value, RESET,
         BOLD, ctrl_input->axes[4].value, RESET, BOLD, ctrl_input->axes[5].value, RESET);
 #ifdef CONFIG_BLUERETRO_ADAPTER_BTNS_DBG

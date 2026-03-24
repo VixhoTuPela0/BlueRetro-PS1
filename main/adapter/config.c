@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -358,7 +359,7 @@ static int32_t config_load_from_file(struct config *data, char *filename) {
             ret = config_store_on_file(data, filename);
         }
         else {
-            printf("%s: Upgrading cfg v%ld to v%d\n", __FUNCTION__, file_ver, CONFIG_VERSION);
+            printf("%s: Upgrading cfg v%" PRId32 " to v%d\n", __FUNCTION__, file_ver, CONFIG_VERSION);
             for (uint32_t i = file_ver; i < CONFIG_VERSION; i++) {
                 if (config_ver_update[i]) {
                     ret = config_ver_update[i](data, filename);

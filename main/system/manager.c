@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -324,7 +325,7 @@ static void wired_port_hdl(void) {
 #ifdef CONFIG_BLUERETRO_HW2
         if (device->ids.out_idx != prev_idx) {
             update++;
-            printf("# %s: BTDEV %ld map to WIRED %ld\n", __FUNCTION__, i, device->ids.out_idx);
+            printf("# %s: BTDEV %" PRId32 " map to WIRED %" PRId32 "\n", __FUNCTION__, i, device->ids.out_idx);
             if (bt_ready) {
                 struct raw_fb fb_data = {0};
 

@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "adapter/config.h"
 #include "zephyr/types.h"
 #include "tools/util.h"
@@ -220,9 +221,9 @@ void sea_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct wir
 
         gbahd_osd(ctrl_data, wired_data);
 
-        TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%ld, %ld, %d]},\n",
+        TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%" PRId32 ", %" PRId32 ", %d]},\n",
             map_tmp->buttons, map_tmp->buttons_high, map_tmp->buttons_osd);
-        BT_MON_LOG("\"wired_output\": {\"btns\": [%08lX, %08lX, %04X]},\n",
+        BT_MON_LOG("\"wired_output\": {\"btns\": ["%08" PRIX32 ", "%08" PRIX32 ", %04X]},\n",
             map_tmp->buttons, map_tmp->buttons_high, map_tmp->buttons_osd);
     }
 }

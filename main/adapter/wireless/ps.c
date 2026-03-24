@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
@@ -107,7 +108,7 @@ static void ps4_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_d
     struct ps4_map *map = (struct ps4_map *)bt_data->base.input;
     struct ctrl_meta *meta = bt_data->raw_src_mappings[PAD].meta;
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld, \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %lu, \"hat\": %u},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRId32 ", \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %" PRIu32 ", \"hat\": %u},\n",
         bt_data->base.report_id, map->axes[ps4_axes_idx[0]], map->axes[ps4_axes_idx[1]], map->axes[ps4_axes_idx[2]],
         map->axes[ps4_axes_idx[3]], map->axes[ps4_axes_idx[4]], map->axes[ps4_axes_idx[5]], map->buttons, map->hat & 0xF);
 
@@ -151,7 +152,7 @@ static void ps5_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_d
     struct ps5_map *map = (struct ps5_map *)bt_data->base.input;
     struct ctrl_meta *meta = bt_data->raw_src_mappings[PAD].meta;
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld, \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %lu, \"hat\": %u},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRId32 ", \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %" PRIu32 ", \"hat\": %u},\n",
         bt_data->base.report_id, map->axes[ps5_axes_idx[0]], map->axes[ps5_axes_idx[1]], map->axes[ps5_axes_idx[2]],
         map->axes[ps5_axes_idx[3]], map->axes[ps5_axes_idx[4]], map->axes[ps5_axes_idx[5]], map->buttons, map->hat & 0xF);
 
@@ -189,7 +190,7 @@ static void hid_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_d
     struct hid_map *map = (struct hid_map *)bt_data->base.input;
     struct ctrl_meta *meta = bt_data->raw_src_mappings[PAD].meta;
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld, \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %lu, \"hat\": %u},\n",
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRId32 ", \"axes\": [%u, %u, %u, %u, %u, %u], \"btns\": %" PRIu32 ", \"hat\": %u},\n",
         bt_data->base.report_id, map->axes[ps4_axes_idx[0]], map->axes[ps4_axes_idx[1]], map->axes[ps4_axes_idx[2]],
         map->axes[ps4_axes_idx[3]], map->axes[ps4_axes_idx[4]], map->axes[ps4_axes_idx[5]], map->buttons, map->hat & 0xF);
 
@@ -275,7 +276,7 @@ int32_t ps_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data) 
             ps5_to_generic(bt_data, ctrl_data);
             break;
         default:
-            printf("# Unknown report type: %02lX\n", bt_data->base.report_type);
+            printf("# Unknown report type: "%02" PRIX32 "\n", bt_data->base.report_type);
             return -1;
     }
 

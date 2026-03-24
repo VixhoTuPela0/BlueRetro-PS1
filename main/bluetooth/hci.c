@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <freertos/ringbuf.h>
@@ -1035,7 +1036,7 @@ static void bt_hci_le_meta_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             if (device) {
                 if (le_conn_complete->status) {
                     device->pkt_retry++;
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, le_conn_complete->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, le_conn_complete->status);
                     if (!atomic_test_bit(&device->flags, BT_DEV_PAGE) && device->pkt_retry < BT_MAX_RETRY) {
                         bt_hci_cmd_le_create_conn((void *)&le_conn_complete->peer_addr);
                     }
@@ -1057,8 +1058,8 @@ static void bt_hci_le_meta_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
                     bt_nb_inquiry = BT_INQUIRY_MAX;
                     device->acl_handle = le_conn_complete->handle;
                     device->pkt_retry = 0;
-                    printf("dev: %ld acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
-                    bt_mon_log(true, "dev: %ld acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
+                    printf("dev: %" PRId32 " acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
+                    bt_mon_log(true, "dev: %" PRId32 " acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
                     atomic_set_bit(&device->flags, BT_DEV_IS_BLE);
                     if (bt_host_load_le_ltk(&device->le_remote_bdaddr, &encrypt_info, &master_ident) == 0) {
                         bt_hci_start_encryption(device->acl_handle, *(uint64_t *)master_ident.rand, *(uint16_t *)master_ident.ediv, encrypt_info.ltk);
@@ -1146,10 +1147,10 @@ connect:
                         bt_hci_cmd_le_set_scan_enable(0);
                         bt_hci_cmd_le_set_adv_disable(NULL);
                         bt_hci_cmd_le_create_conn((void *)&le_adv_report->adv_info[0].addr);
-                        printf("LE ADV dev: %ld type: %ld bdaddr: %02X - %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type, device->le_remote_bdaddr.type,
+                        printf("LE ADV dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X - %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type, device->le_remote_bdaddr.type,
                             device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                             device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
-                        bt_mon_log(true, "LE ADV dev: %ld type: %ld bdaddr: %02X - %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type, device->le_remote_bdaddr.type,
+                        bt_mon_log(true, "LE ADV dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X - %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type, device->le_remote_bdaddr.type,
                             device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                             device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
                     }
@@ -1176,7 +1177,7 @@ skip:
             bt_host_get_dev_from_handle(le_remote_feat->handle, &device);
             if (device) {
                 if (le_remote_feat->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, le_remote_feat->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, le_remote_feat->status);
                 }
             }
             else {
@@ -1388,10 +1389,10 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
                         bt_l2cap_init_dev_scid(device);
                         atomic_set_bit(&device->flags, BT_DEV_DEVICE_FOUND);
                         bt_hci_cmd_connect(device->remote_bdaddr);
-                        printf("Inquiry dev: %ld type: %ld bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
+                        printf("Inquiry dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
                             device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                             device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
-                        bt_mon_log(true, "Inquiry dev: %ld type: %ld bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
+                        bt_mon_log(true, "Inquiry dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
                             device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                             device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
                     }
@@ -1408,7 +1409,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             if (device) {
                 if (conn_complete->status) {
                     device->pkt_retry++;
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, conn_complete->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, conn_complete->status);
                     if (!atomic_test_bit(&device->flags, BT_DEV_PAGE) && device->pkt_retry < BT_MAX_RETRY) {
                         bt_hci_cmd_connect(device->remote_bdaddr);
                     }
@@ -1423,8 +1424,8 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
                     bt_nb_inquiry = BT_INQUIRY_MAX;
                     device->acl_handle = conn_complete->handle;
                     device->pkt_retry = 0;
-                    printf("dev: %ld acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
-                    bt_mon_log(true, "dev: %ld acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
+                    printf("dev: %" PRId32 " acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
+                    bt_mon_log(true, "dev: %" PRId32 " acl_handle: 0x%04X\n", device->ids.id, device->acl_handle);
                     bt_hci_cmd_le_set_adv_disable(NULL);
                     bt_hci_cmd_remote_name_request(device->remote_bdaddr);
                 }
@@ -1449,10 +1450,10 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
                     atomic_set_bit(&device->flags, BT_DEV_DEVICE_FOUND);
                     atomic_set_bit(&device->flags, BT_DEV_PAGE);
                     bt_hci_cmd_accept_conn_req(device->remote_bdaddr);
-                    printf("Page dev: %ld type: %ld bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
+                    printf("Page dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
                         device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                         device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
-                    bt_mon_log(true, "Page dev: %ld type: %ld bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
+                    bt_mon_log(true, "Page dev: %" PRId32 " type: %" PRId32 " bdaddr: %02X:%02X:%02X:%02X:%02X:%02X\n", device->ids.id, device->ids.type,
                         device->remote_bdaddr[5], device->remote_bdaddr[4], device->remote_bdaddr[3],
                         device->remote_bdaddr[2], device->remote_bdaddr[1], device->remote_bdaddr[0]);
                 }
@@ -1465,7 +1466,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             printf("# BT_HCI_EVT_DISCONN_COMPLETE\n");
             bt_host_get_dev_from_handle(disconn_complete->handle, &device);
             if (device) {
-                printf("# DISCONN from dev: %ld\n", device->ids.id);
+                printf("# DISCONN from dev: %" PRId32 "\n", device->ids.id);
                 bt_host_reset_dev(device);
                 if (bt_host_get_active_dev(&device) == BT_NONE) {
                     if (config.global_cfg.inquiry_mode == INQ_AUTO) {
@@ -1498,10 +1499,10 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             bt_host_get_dev_from_handle(auth_complete->handle, &device);
             if (device) {
                 if (auth_complete->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, auth_complete->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, auth_complete->status);
                 }
                 else {
-                    printf("# dev: %ld Pairing done\n", device->ids.id);
+                    printf("# dev: %" PRId32 " Pairing done\n", device->ids.id);
                     if (!atomic_test_bit(&device->flags, BT_DEV_PAGE)) {
                         if (atomic_test_bit(&device->flags, BT_DEV_ENCRYPTION)) {
                             bt_hci_cmd_set_conn_encrypt(&device->acl_handle);
@@ -1523,7 +1524,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             if (device) {
                 if (remote_name_req_complete->status) {
                     device->pkt_retry++;
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, remote_name_req_complete->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, remote_name_req_complete->status);
                     if (device->pkt_retry < BT_MAX_RETRY) {
                         bt_hci_cmd_remote_name_request(device->remote_bdaddr);
                     }
@@ -1553,8 +1554,8 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
                         }
                         bt_hci_cmd_auth_requested(&device->acl_handle);
                     }
-                    printf("dev: %ld type: %ld:%ld %s\n", device->ids.id, device->ids.type, device->ids.subtype, remote_name_req_complete->name);
-                    bt_mon_log(true, "dev: %ld type: %ld:%ld %s\n", device->ids.id, device->ids.type, device->ids.subtype, remote_name_req_complete->name);
+                    printf("dev: %" PRId32 " type: %" PRId32 ":%" PRIu32 " %s\n", device->ids.id, device->ids.type, device->ids.subtype, remote_name_req_complete->name);
+                    bt_mon_log(true, "dev: %" PRId32 " type: %" PRId32 ":%" PRIu32 " %s\n", device->ids.id, device->ids.type, device->ids.subtype, remote_name_req_complete->name);
                 }
             }
             else {
@@ -1569,7 +1570,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             bt_host_get_dev_from_handle(encrypt_change->handle, &device);
             if (device) {
                 if (encrypt_change->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, encrypt_change->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, encrypt_change->status);
                     if (atomic_test_bit(&device->flags, BT_DEV_IS_BLE)) {
                         bt_host_clear_le_ltk(&device->le_remote_bdaddr);
                         bt_hci_cmd_disconnect(&device->acl_handle, BT_HCI_ERR_AUTHENTICATION_FAIL);
@@ -1591,7 +1592,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             bt_host_get_dev_from_handle(remote_features->handle, &device);
             if (device) {
                 if (remote_features->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, remote_features->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, remote_features->status);
                 }
                 else {
                     if (remote_features->features[7] & 0x80) {
@@ -1615,7 +1616,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             bt_host_get_dev_from_handle(remote_version_info->handle, &device);
             if (device) {
                 if (remote_version_info->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, remote_version_info->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, remote_version_info->status);
                 }
             }
             else {
@@ -1629,7 +1630,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             uint8_t status = bt_hci_evt_pkt->evt_data[sizeof(*cmd_complete)];
             printf("# BT_HCI_EVT_CMD_COMPLETE\n");
             if (status != BT_HCI_ERR_SUCCESS && status != BT_HCI_ERR_UNKNOWN_CMD) {
-                printf("# opcode: 0x%04X error: 0x%02X retry: %ld\n", cmd_complete->opcode, status, bt_hci_pkt_retry);
+                printf("# opcode: 0x%04X error: 0x%02X retry: %" PRIu32 "\n", cmd_complete->opcode, status, bt_hci_pkt_retry);
                 switch (cmd_complete->opcode) {
                     case BT_HCI_OP_READ_BD_ADDR:
                     case BT_HCI_OP_RESET:
@@ -1827,7 +1828,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
         {
             struct bt_hci_evt_mode_change *evt = (struct bt_hci_evt_mode_change *)bt_hci_evt_pkt->evt_data;
             bt_host_get_dev_from_handle(evt->handle, &device);
-            printf("# BT_HCI_EVT_MODE_CHANGE dev: %ld status: %d mode: %d interval %d\n", device->ids.id, evt->status, evt->mode, evt->interval);
+            printf("# BT_HCI_EVT_MODE_CHANGE dev: %" PRId32 " status: %d mode: %d interval %d\n", device->ids.id, evt->status, evt->mode, evt->interval);
             break;
         }
         case BT_HCI_EVT_PIN_CODE_REQ:
@@ -1878,7 +1879,7 @@ void bt_hci_evt_hdlr(struct bt_hci_pkt *bt_hci_evt_pkt) {
             bt_host_get_dev_from_handle(remote_ext_features->handle, &device);
             if (device) {
                 if (remote_ext_features->status) {
-                    printf("# dev: %ld error: 0x%02X\n", device->ids.id, remote_ext_features->status);
+                    printf("# dev: %" PRId32 " error: 0x%02X\n", device->ids.id, remote_ext_features->status);
                 }
             }
             else {

@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <string.h>
 #include <esp_timer.h>
 #include "queue_bss.h"
@@ -45,7 +46,7 @@ void kbmon_init(uint32_t dev_id, kbmon_id_to_code_t callback) {
         kb_monitors[dev_id].callback = callback;
         kb_monitors[dev_id].scq_hdl = queue_bss_init(32, 16);
         if (kb_monitors[dev_id].scq_hdl == NULL) {
-            printf("# Failed to create KBMON:%ld ring buffer\n", dev_id);
+            printf("# Failed to create KBMON:%" PRId32 " ring buffer\n", dev_id);
         }
     }
 }
@@ -85,7 +86,7 @@ int32_t kbmon_set_code(uint32_t dev_id, uint8_t *code, uint32_t len) {
     if (kbmon->scq_hdl) {
         ret = queue_bss_enqueue(kbmon->scq_hdl, code, len);
         if (ret) {
-            printf("# %s KBMON:%ld scq full!\n", __FUNCTION__, dev_id);
+            printf("# %s KBMON:%" PRId32 " scq full!\n", __FUNCTION__, dev_id);
         }
     }
     return ret;

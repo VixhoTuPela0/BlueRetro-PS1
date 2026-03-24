@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <stdarg.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
@@ -57,7 +58,7 @@ char *tests_cmds_hdlr(struct tests_cmds_pkt *pkt) {
                     if (pkt->data_len && pkt->data[0]) {
                         atomic_set_bit(&device->flags, BT_DEV_IS_BLE);
                     }
-                    printf("# TESTS handle: %d dev: %ld type: %ld\n", pkt->handle, device->ids.id, device->ids.type);
+                    printf("# TESTS handle: %d dev: %" PRId32 " type: %" PRId32 "\n", pkt->handle, device->ids.id, device->ids.type);
                     TESTS_CMDS_LOG("\"device_conn\": {\"handle\": %d, \"device_id\": %d, \"device_type\": %d},\n",
                         pkt->handle, device->ids.id, device->ids.type);
                 }
@@ -67,7 +68,7 @@ char *tests_cmds_hdlr(struct tests_cmds_pkt *pkt) {
             /* Device disconnection */
             device = devices[pkt->handle];
             if (device) {
-                printf("# TESTS DISCONN from handle: %d dev: %ld\n", pkt->handle, device->ids.id);
+                printf("# TESTS DISCONN from handle: %d dev: %" PRId32 "\n", pkt->handle, device->ids.id);
                 TESTS_CMDS_LOG("\"device_disconn\": {\"handle\": %d, \"device_id\": %d},\n",
                     pkt->handle, device->ids.id);
                 bt_host_reset_dev(device);
@@ -79,7 +80,7 @@ char *tests_cmds_hdlr(struct tests_cmds_pkt *pkt) {
             device = devices[pkt->handle];
             if (device) {
                 bt_hid_set_type_flags_from_name(device, (char *)pkt->data);
-                printf("# dev: %ld type: %ld:%ld %s\n", device->ids.id, device->ids.type, device->ids.subtype, pkt->data);
+                printf("# dev: %" PRId32 " type: %" PRId32 ":%" PRId32 " %s\n", device->ids.id, device->ids.type, device->ids.subtype, pkt->data);
                 TESTS_CMDS_LOG("\"device_name\": {\"device_id\": %d, \"device_type\": %d, \"device_subtype\": %d, \"device_name\": \"%s\"},\n",
                     device->ids.id, device->ids.type, device->ids.subtype, pkt->data);
                 bt_hid_init(device);
@@ -131,7 +132,7 @@ char *tests_cmds_hdlr(struct tests_cmds_pkt *pkt) {
                 bt_data = &bt_adapter.data[device->ids.id];
                 bt_data->base.vid = *(uint16_t *)&pkt->data[0];
                 bt_data->base.pid = *(uint16_t *)&pkt->data[2];
-                printf("# %s: dev: %ld VID: 0x%04X PID: 0x%04X\n", __FUNCTION__,
+                printf("# %s: dev: %" PRId32 " VID: 0x%04X PID: 0x%04X\n", __FUNCTION__,
                     device->ids.id, bt_data->base.vid, bt_data->base.pid);
                 TESTS_CMDS_LOG("\"device_vid_pid\": {\"device_id\": %d, \"vid\": %d, \"pid\": %d},\n",
                     device->ids.id, bt_data->base.vid, bt_data->base.pid);

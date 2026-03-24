@@ -73,7 +73,10 @@ idf_component_register(
 )
 
 include(CheckCCompilerFlag)
+set(save_cmake_required_flags ${CMAKE_REQUIRED_FLAGS})
+set(CMAKE_REQUIRED_FLAGS "-Werror")
 check_c_compiler_flag(-Wno-address-of-packed-member COMPILER_SUPPORTS_WNO_ADDRESS_OF_PACKED_MEMBER)
+set(CMAKE_REQUIRED_FLAGS ${save_cmake_required_flags})
 if(COMPILER_SUPPORTS_WNO_ADDRESS_OF_PACKED_MEMBER)
     target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-address-of-packed-member)
 endif()

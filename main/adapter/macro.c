@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <inttypes.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
 #include "system/manager.h"
@@ -53,7 +54,7 @@ static void check_macro(uint32_t index, int32_t value, struct macro *macro, atom
     else if (atomic_test_bit(flags, macro->flag_mask)) {
         atomic_clear_bit(flags, macro->flag_mask);
 
-        printf("# %s: Apply macro %08lX %08lX\n", __FUNCTION__, value, macro->macro);
+        printf("# %s: Apply macro "%08" PRIX32 " "%08" PRIX32 "\n", __FUNCTION__, value, macro->macro);
         if (macro->cfg_func) {
             macro->cfg_func(index);
         }

@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "zephyr/types.h"
 #include "tools/util.h"
 #include "adapter/config.h"
@@ -377,9 +378,9 @@ void cdi_ctrl_from_generic(struct wired_ctrl *ctrl_data, struct wired_data *wire
 
     memcpy(wired_data->output, (void *)&map_tmp, sizeof(map_tmp) - 8);
 
-    TESTS_CMDS_LOG("\"wired_output\": {\"axes\": [%ld, %ld], \"btns\": %d},\n",
+    TESTS_CMDS_LOG("\"wired_output\": {\"axes\": [%" PRId32 ", %" PRId32 "], \"btns\": %d},\n",
         raw_axes[cdi_axes_idx[0]], raw_axes[cdi_axes_idx[1]], map_tmp.buttons);
-    BT_MON_LOG("\"wired_output\": {\"axes\": [%08lX, %08lX], \"btns\": %02X},\n",
+    BT_MON_LOG("\"wired_output\": {\"axes\": ["%08" PRIX32 ", "%08" PRIX32 "], \"btns\": %02X},\n",
         raw_axes[cdi_axes_idx[0]], raw_axes[cdi_axes_idx[1]], map_tmp.buttons);
 }
 

@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include <esp_timer.h>
 #include "bluetooth/host.h"
 #include "bluetooth/hci.h"
@@ -449,7 +450,7 @@ void bt_hid_sw_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, ui
                     if (device->ids.report_type != BT_HIDP_SW_STATUS) {
                         bt_type_update(device->ids.id, BT_SW, device->ids.subtype);
                         device->ids.report_type = BT_HIDP_SW_STATUS;
-                        printf("# %s: Report type change to %02lX\n", __FUNCTION__, device->ids.report_type);
+                        printf("# %s: Report type change to "%02" PRIX32 "\n", __FUNCTION__, device->ids.report_type);
                     }
                     bt_host_bridge(device, bt_hci_acl_pkt->hidp_hdr.protocol, bt_hci_acl_pkt->hidp_data, hidp_data_len);
                     break;
@@ -459,7 +460,7 @@ void bt_hid_sw_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, ui
                     if (device->ids.report_type != BT_HIDP_SW_STATUS_NATIVE) {
                         bt_type_update(device->ids.id, BT_SW, device->ids.subtype);
                         device->ids.report_type = BT_HIDP_SW_STATUS_NATIVE;
-                        printf("# %s: Report type change to %02lX\n", __FUNCTION__, device->ids.report_type);
+                        printf("# %s: Report type change to "%02" PRIX32 "\n", __FUNCTION__, device->ids.report_type);
                     }
                     bt_host_bridge(device, bt_hci_acl_pkt->hidp_hdr.protocol, bt_hci_acl_pkt->hidp_data, hidp_data_len);
                     break;

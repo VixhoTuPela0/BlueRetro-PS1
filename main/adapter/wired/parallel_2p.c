@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "adapter/config.h"
 #include "zephyr/types.h"
 #include "tools/util.h"
@@ -130,9 +131,9 @@ void para_2p_from_generic(int32_t dev_mode, struct wired_ctrl *ctrl_data, struct
         GPIO.out = (map1->buttons | map1_mask->buttons) & (map2->buttons | map2_mask->buttons);
         GPIO.out1.val = (map1->buttons_high | map1_mask->buttons_high) & (map2->buttons_high | map2_mask->buttons_high);
 
-        TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%ld, %ld]},\n",
+        TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%" PRId32 ", %" PRId32 "]},\n",
             map_tmp.buttons, map_tmp.buttons_high);
-        BT_MON_LOG("\"wired_output\": {\"btns\": [%08lX, %08lX]},\n",
+        BT_MON_LOG("\"wired_output\": {\"btns\": ["%08" PRIX32 ", "%08" PRIX32 "]},\n",
             map_tmp.buttons, map_tmp.buttons_high);
     }
 }

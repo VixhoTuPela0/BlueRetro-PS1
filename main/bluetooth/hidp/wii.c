@@ -4,6 +4,7 @@
  */
 
 #include <stdio.h>
+#include <inttypes.h>
 #include "bluetooth/host.h"
 #include "wii.h"
 
@@ -178,7 +179,7 @@ void bt_hid_wii_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                     if (subtype > BT_SUBTYPE_DEFAULT) {
                         bt_type_update(device->ids.id, BT_WII, subtype);
                     }
-                    printf("# dev: %ld wii ext: %ld\n", device->ids.id, device->ids.subtype);
+                    printf("# dev: %" PRId32 " wii ext: %" PRId32 "\n", device->ids.id, device->ids.subtype);
 
 #ifndef CONFIG_BLUERETRO_TEST_FALLBACK_REPORT
                     if ((subtype == BT_WII_CLASSIC || subtype == BT_WII_CLASSIC_PRO) && device->hid_state < WII_EXT_STATE_SET_8BIT) {
@@ -197,7 +198,7 @@ void bt_hid_wii_hdlr(struct bt_dev *device, struct bt_hci_pkt *bt_hci_acl_pkt, u
                     struct bt_hidp_wii_ack *ack = (struct bt_hidp_wii_ack *)bt_hci_acl_pkt->hidp_data;
                     printf("# BT_HIDP_WII_ACK\n");
                     if (ack->err) {
-                        printf("# dev: %ld ack err: 0x%02X\n", device->ids.id, ack->err);
+                        printf("# dev: %" PRId32 " ack err: 0x%02X\n", device->ids.id, ack->err);
                         bt_wii_exec_next_state(device);
                     }
                     else {

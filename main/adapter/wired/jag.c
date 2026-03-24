@@ -4,6 +4,7 @@
  */
 
 #include <string.h>
+#include <inttypes.h>
 #include "adapter/config.h"
 #include "adapter/wired/wired.h"
 #include "zephyr/types.h"
@@ -271,9 +272,9 @@ static void jag_ctrl_from_generic(struct wired_ctrl *ctrl_data, struct wired_dat
 
     memcpy(wired_data->output, (void *)&map_tmp, sizeof(map_tmp));
 
-    TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%ld, %ld, %ld, %ld]},\n",
+    TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 "]},\n",
         map_tmp.buttons[0], map_tmp.buttons[1], map_tmp.buttons[2], map_tmp.buttons[3]);
-    BT_MON_LOG("\"wired_output\": {\"btns\": [%08lX, %08lX, %08lX, %08lX]},\n",
+    BT_MON_LOG("\"wired_output\": {\"btns\": ["%08" PRIX32 ", "%08" PRIX32 ", "%08" PRIX32 ", "%08" PRIX32 "]},\n",
         map_tmp.buttons[0], map_tmp.buttons[1], map_tmp.buttons[2], map_tmp.buttons[3]);
 }
 
@@ -333,9 +334,9 @@ static void jag_6d_from_generic(struct wired_ctrl *ctrl_data, struct wired_data 
 
     memcpy(wired_data->output, (void *)&map_tmp, sizeof(map_tmp));
 
-    TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%ld, %ld, %ld, %ld]},\n",
+    TESTS_CMDS_LOG("\"wired_output\": {\"btns\": [%" PRId32 ", %" PRId32 ", %" PRId32 ", %" PRId32 "]},\n",
         map_tmp.buttons[0], map_tmp.buttons[1], map_tmp.buttons[2], map_tmp.buttons[3]);
-    BT_MON_LOG("\"wired_output\": {\"btns\": [%08lX, %08lX, %08lX, %08lX]},\n",
+    BT_MON_LOG("\"wired_output\": {\"btns\": ["%08" PRIX32 ", "%08" PRIX32 ", "%08" PRIX32 ", "%08" PRIX32 "]},\n",
         map_tmp.buttons[0], map_tmp.buttons[1], map_tmp.buttons[2], map_tmp.buttons[3]);
 }
 

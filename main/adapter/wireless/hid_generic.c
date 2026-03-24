@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <inttypes.h>
 #include <math.h>
 #include "zephyr/types.h"
 #include "zephyr/usb_hid.h"
@@ -133,7 +134,7 @@ static void hid_kb_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctr
     struct hid_report_meta *meta = &devices_meta[bt_data->base.pids->id].reports_meta[KB];
     struct raw_src_mapping *map = &bt_data->raw_src_mappings[KB];
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld", bt_data->base.report_id);
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRIu32, bt_data->base.report_id);
 
     if (!atomic_test_bit(&bt_data->base.flags[KB], BT_INIT)) {
         hid_parser_load_report(bt_data, bt_data->base.report_id);
@@ -154,7 +155,7 @@ static void hid_kb_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctr
         uint32_t bit_shift = offset % 8;
         uint32_t buttons = ((*(uint32_t *)(bt_data->base.input + byte_offset)) >> bit_shift) & mask;
 
-        TESTS_CMDS_LOG(", \"modifiers\": %lu", buttons);
+        TESTS_CMDS_LOG(", \"modifiers\": %" PRIu32, buttons);
 
         for (uint8_t i = 0, mask = 1; mask; i++, mask <<= 1) {
             if (buttons & mask) {
@@ -177,7 +178,7 @@ static void hid_kb_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctr
                 if (i) {
                     TESTS_CMDS_LOG(", ");
                 }
-                TESTS_CMDS_LOG("%lu", key_field);
+                TESTS_CMDS_LOG("%" PRIu32, key_field);
 
                 for (uint32_t mask = 1; mask; mask <<= 1) {
                     uint32_t key = __builtin_ffs(key_field & mask);
@@ -203,7 +204,7 @@ static void hid_kb_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctr
                 if (i) {
                     TESTS_CMDS_LOG(", ");
                 }
-                TESTS_CMDS_LOG("%lu", key);
+                TESTS_CMDS_LOG("%" PRIu32, key);
 
                 if (key > 3 && key < ARRAY_SIZE(hid_kb_key_to_generic)) {
                     ctrl_data->btns[(hid_kb_key_to_generic[key] >> 5)].value |= BIT(hid_kb_key_to_generic[key] & 0x1F);
@@ -635,9 +636,9 @@ static void hid_pad_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ct
     struct ctrl_meta *ctrl_meta = bt_data->raw_src_mappings[PAD].meta;
     struct raw_src_mapping *map = &bt_data->raw_src_mappings[PAD];
 
-    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %ld", bt_data->base.report_id);
+    TESTS_CMDS_LOG("\"wireless_input\": {\"report_id\": %" PRIu32, bt_data->base.report_id);
 #ifdef CONFIG_BLUERETRO_ADAPTER_INPUT_DBG
-    printf("R%ld: ", bt_data->base.report_id);
+    printf("R%" PRIu32 ": ", bt_data->base.report_id);
 #endif
 
     if (!atomic_test_bit(&bt_data->base.flags[PAD], BT_INIT)) {
@@ -660,7 +661,7 @@ static void hid_pad_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ct
         uint32_t bit_shift = offset % 8;
         uint32_t buttons = ((*(uint32_t *)(bt_data->base.input + byte_offset)) >> bit_shift) & mask;
 
-        TESTS_CMDS_LOG(", \"btns\": %lu", buttons);
+        TESTS_CMDS_LOG(", \"btns\": %" PRIu32, buttons);
 
         for (uint32_t i = 0; i < ARRAY_SIZE(generic_btns_mask); i++) {
             if (buttons & bt_data->raw_src_mappings[PAD].btns_mask[i]) {
@@ -679,7 +680,7 @@ static void hid_pad_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ct
         uint32_t hat = ((*(uint32_t *)(bt_data->base.input + byte_offset)) >> bit_shift) & mask;
         uint32_t min = bt_data->reports[PAD]->usages[meta->hid_hat_idx].logical_min;
 
-        TESTS_CMDS_LOG(", \"hat\": %lu", hat);
+        TESTS_CMDS_LOG(", \"hat\": %" PRIu32, hat);
 
         ctrl_data->btns[0].value |= hat_to_ld_btns[(hat - min) & 0xF];
     }
@@ -712,14 +713,14 @@ static void hid_pad_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ct
             /* Is axis unsign? */
             if (bt_data->reports[PAD]->usages[map->axes_idx[i]].logical_min >= 0) {
                 ctrl_data->axes[i].value = value - ctrl_meta[i].neutral + bt_data->base.axes_cal[i];
-                TESTS_CMDS_LOG("%lu", value);
+                TESTS_CMDS_LOG("%" PRIu32, value);
             }
             else {
                 ctrl_data->axes[i].value = value;
                 if (ctrl_data->axes[i].value & BIT(len - 1)) {
                     ctrl_data->axes[i].value |= ~mask;
                 }
-                TESTS_CMDS_LOG("%ld", ctrl_data->axes[i].value);
+                TESTS_CMDS_LOG("%" PRId32, ctrl_data->axes[i].value);
                 ctrl_data->axes[i].value += bt_data->base.axes_cal[i];
             }
         }
@@ -742,19 +743,19 @@ int32_t hid_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data)
         uint32_t bit_shift = offset % 8;
         uint32_t value = ((*(uint32_t *)(bt_data->base.input + byte_offset)) >> bit_shift) & mask;
         if (report->usages[i].bit_size <= 4) {
-            printf("R%ld %02lX%02lX: %s%01lX%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
+            printf("R%" PRId32 " %02" PRIX32 "%02" PRIX32 ": %s%01" PRIX32 "%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
         }
         else if (report->usages[i].bit_size <= 8) {
-            printf("R%ld %02lX%02lX: %s%02lX%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
+            printf("R%" PRId32 " %02" PRIX32 "%02" PRIX32 ": %s%02" PRIX32 "%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
         }
         else if (report->usages[i].bit_size <= 12) {
-            printf("R%ld %02lX%02lX: %s%03lX%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
+            printf("R%" PRId32 " %02" PRIX32 "%02" PRIX32 ": %s%03" PRIX32 "%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
         }
         else if (report->usages[i].bit_size <= 16) {
-            printf("R%ld %02lX%02lX: %s%04lX%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
+            printf("R%" PRId32 " %02" PRIX32 "%02" PRIX32 ": %s%04" PRIX32 "%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
         }
         else if (report->usages[i].bit_size <= 32) {
-            printf("R%ld %02lX%02lX: %s%08lX%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
+            printf("R%" PRId32 " %02" PRIX32 "%02" PRIX32 ": %s%08" PRIX32 "%s, ", bt_data->base.report_type, report->usages[i].usage_page, report->usages[i].usage, BOLD, value, RESET);
         }
     }
     printf("\n");
@@ -771,7 +772,7 @@ int32_t hid_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data)
             hid_pad_to_generic(bt_data, ctrl_data);
             break;
         default:
-            printf("# Unsupported report type: %02lX\n", bt_data->base.report_type);
+            printf("# Unsupported report type: %02" PRIX32 "\n", (uint32_t)bt_data->base.report_type);
             return -1;
     }
 #endif
