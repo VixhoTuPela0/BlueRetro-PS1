@@ -1,11 +1,5 @@
 menu "BlueRetro"
 
-    config BLUERETRO_HW2
-        bool "Enable support for HW2 features"
-        default y
-        help
-            Select this to enable HW2 features like port detection.
-
     choice
         prompt "Select universal or specific system"
         default BLUERETRO_SYSTEM_PSX_PS2

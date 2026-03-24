@@ -5,29 +5,25 @@
 
 #include <stddef.h>
 #include "hid_generic.h"
-#include "ps3.h"
-#include "wii.h"
 #include "ps.h"
-#include "sw.h"
-#include "sw2.h"
 #include "wireless.h"
 
 static to_generic_t to_generic_func[BT_TYPE_MAX] = {
     hid_to_generic, /* BT_HID_GENERIC */
-    ps3_to_generic, /* BT_PS3 */
-    wii_to_generic, /* BT_WII */
+    NULL, /* BT_PS3 (disabled) */
+    NULL, /* BT_WII (disabled) */
     ps_to_generic, /* BT_PS */
-    sw_to_generic, /* BT_SW */
-    sw2_to_generic, /* BT_SW2 */
+    NULL, /* BT_SW (disabled) */
+    NULL, /* BT_SW2 (disabled) */
 };
 
 static fb_from_generic_t fb_from_generic_func[BT_TYPE_MAX] = {
     hid_fb_from_generic, /* BT_HID_GENERIC */
-    ps3_fb_from_generic, /* BT_PS3 */
-    wii_fb_from_generic, /* BT_WII */
+    NULL, /* BT_PS3 (disabled) */
+    NULL, /* BT_WII (disabled) */
     ps_fb_from_generic, /* BT_PS */
-    sw_fb_from_generic, /* BT_SW */
-    sw2_fb_from_generic, /* BT_SW2 */
+    NULL, /* BT_SW (disabled) */
+    NULL, /* BT_SW2 (disabled) */
 };
 
 int32_t wireless_to_generic(struct bt_data *bt_data, struct wireless_ctrl *ctrl_data) {
