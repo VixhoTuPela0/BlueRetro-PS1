@@ -108,7 +108,11 @@ idf_component_register(
     LDFRAGMENTS linker.lf
 )
 
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-address-of-packed-member)
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-Wno-address-of-packed-member COMPILER_SUPPORTS_WNO_ADDRESS_OF_PACKED_MEMBER)
+if(COMPILER_SUPPORTS_WNO_ADDRESS_OF_PACKED_MEMBER)
+    target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-address-of-packed-member)
+endif()
 target_compile_options(${COMPONENT_LIB} PRIVATE -fno-builtin-memset)
 target_compile_options(${COMPONENT_LIB} PRIVATE -fno-builtin-memcpy)
 
