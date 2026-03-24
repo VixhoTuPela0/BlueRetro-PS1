@@ -504,6 +504,37 @@ int32_t bt_host_get_active_dev_from_out_idx(uint8_t out_idx, struct bt_dev **dev
     return -1;
 }
 
+void bt_host_disconnect_player(uint8_t out_idx) {
+    struct bt_dev *device = NULL;
+    if (bt_host_get_active_dev_from_out_idx(out_idx, &device) >= 0 && device) {
+        printf("# %s disconnecting player out_idx=%d\n", __FUNCTION__, out_idx);
+        bt_hci_disconnect(device);
+    }
+}
+
+void bt_host_swap_players(uint8_t out_idx_a, uint8_t out_idx_b) {
+    /* Collect the two devices to swap in a single pass to avoid
+     * accidentally re-matching a device that was just reassigned. */
+    struct bt_dev *dev_a = NULL;
+    struct bt_dev *dev_b = NULL;
+    for (uint32_t i = 0; i < BT_MAX_DEV; i++) {
+        if (atomic_test_bit(&bt_dev[i].flags, BT_DEV_DEVICE_FOUND)) {
+            if (bt_dev[i].ids.out_idx == out_idx_a) {
+                dev_a = &bt_dev[i];
+            } else if (bt_dev[i].ids.out_idx == out_idx_b) {
+                dev_b = &bt_dev[i];
+            }
+        }
+    }
+    if (dev_a) {
+        dev_a->ids.out_idx = out_idx_b;
+    }
+    if (dev_b) {
+        dev_b->ids.out_idx = out_idx_a;
+    }
+    printf("# %s swapped out_idx %d <-> %d\n", __FUNCTION__, out_idx_a, out_idx_b);
+}
+
 int32_t bt_host_get_dev_conf(struct bt_dev **device) {
     *device = &bt_dev_conf;
     return 0;
